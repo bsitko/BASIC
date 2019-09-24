@@ -1,5 +1,5 @@
-# Commander X16 Prototype
+BASIC PROGRAMMING
 
-My Commander X16 code
+My BASIC Programming
 
-This is just my personal sandbox for all things Commander X16 code.
+This is just my personal sandbox for all things Commander X16 / C64.
