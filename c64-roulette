@@ -1,0 +1,66 @@
+1 REM X16 ROULETTE
+4 REM N - # CHOSEN PLAYER, C: CONVERSION OF C$ TO #
+5 REM B: PLAYERS BET, CO: COLOR ODDS, M: PLAYER MONEY
+6 REM C1: ROULETTE WHEEL COLOR, C$: COLOR CHOSEN BY PLAYER
+10 M=1000:ODDS=36:WIN=0:MAX=1000:B=0:CO=1:RMAX=1000
+20 REM IFPEEK($D9)<>80 THEN SYS$FF5F: SET SCREEN TO 80 CHARACTERS
+30 poke 56320,0:poke56321,0:PRINT"{clear}":REM SET BKG BLUE, CLEAR SCREEN
+40 PRINT"{reverse on}{white}x16 roulette{reverse off}":FORI=1TO2:PRINTCHR$(13):NEXT
+60 PRINT"{white}do you want to guess{return}{black}(n){white}umber or {black}(c){white}olor?{black}"
+70 GET A$:IFA$=""THEN70
+80 IFA$="n"THENGOSUB1000
+90 IFA$="c"THENGOSUB2000
+100 GOSUB 5000: REM GET YOUR BET
+110 GOSUB 8000: REM SPIN WHEEL
+120 N1=INT(ODDS*RND(0)+1)
+130 C1=INT(2*RND(0)+1)
+140 PRINT"{white}the wheel stopped on:"
+150 IFC1=1THENPRINT"{red}{reverse on}"N1" red{reverse off}{white}"
+160 IFC1=2THENPRINT"{black}{reverse on}"N1" black{reverse off}{white}"
+200 REM COMPUTE WINS OR LOSSES
+240 IFN1=NTHENPRINT"{down}you got the number":WIN=ODDS*B:M=M+WIN:GOTO300
+250 IFC1=CTHENPRINT"{down}you got the color":WIN=CO*B:M=M+WIN:GOTO300
+260 PRINT"{down}you lost. better luck next time!":GOSUB6000:GOTO300
+300 REM TELL PLAYER WHETHER THEY WON OR LOST
+320 IFM<=0THENGOSUB 7000
+330 GOSUB 9000
+340 PRINT"{white}{down}why not press your luck? {black}{reverse on}y{reverse off}{white} or {black}{reverse on}n{reverse off}{white}?{black}"
+350 GETA$:IFA$="" THEN 350
+360 IF A$="y" THEN GOTO 60
+370 IF A$="n" THEN 7050
+380 GOTO 350
+1000 REM GUESS BY NUMBER
+1005 INPUT"{white}what number (1-36){black}";N
+1010 IFN<1 OR N>ODDS THEN GOTO1005
+1020 RETURN
+2000 PRINT"{white}what color: {red}{reverse on}(r)ed{reverse off}{white} or {black}{reverse on}(b)lack{reverse off}{white}?{black}"
+2010 GETC$:IFC$=""THEN2010
+2020 IFC$="b"THENC=2:REM BLACK CHOSEN
+2030 IFC$="r"THENC=1:REM RED CHOSEN
+2040 IFC$<>"b" AND C$<>"r"THEN2010
+2050 RETURN
+5000 REM COLLECT YOUR BET
+5010 IFM<RMAXTHEN RMAX=M:IFRMAX>MAXTHENRMAX=MAX
+5020 GOSUB 9000:PRINT "max bet is $"RMAX
+5030 INPUT "{white}{down}what is your bet{black}";B
+5040 IFB<0ORB>MTHENPRINT"you don't have enough money":GOTO5030
+5050 RETURN
+6000 REM YOU LOST THAT BET
+6010 M=M-B:IF M<=0THEN 7000
+6020 RETURN
+7000 REM OUT OF MONEY
+7010 PRINT "{white}{reverse on}you are bankrupt!{reverse off}"
+7020 PRINT "{down}try again? {black}y{white} or {black}n{white}?{black}"
+7030 GETA$:IFA$=""THEN7030
+7040 IFA$="y" THEN GOTO 10
+7050 PRINT "{white}thanks for playing!"
+7060 IFM>0 THEN PRINT"you are leaving with $";M
+7070 END
+8000 PRINT"{white}{down*2}spinning:{down}":FORZ=1TO200STEP40 : REM SPIN THE ROULETTE WHEEL
+8010 PRINT"{black}{cm a}{up}{left}":FORI=0TO10+Z:NEXT:PRINT"{black}{cm s}{up}{left}":FORI=0TO10+Z:NEXT
+8020 PRINT"{black}{cm x}{up}{left}":FORI=0TO10+Z:NEXT:PRINT"{black}{cm z}{up}{left}":FORI=0TO10+Z:NEXT
+8030 NEXTZ
+8040 RETURN
+9000 REM DISPLAY HOW MUCH MONEY YOU HAVE REMAINING
+9010 PRINT"{down}{white}{reverse on}you have $"M"remaining.{reverse off}"
+9020 RETURN
