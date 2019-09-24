@@ -1,11 +1,13 @@
-1 REM C64 ROULETTE - FROM X16 VERSION
+1 REM C64 ROULETTE
 4 REM N - # CHOSEN PLAYER, C: CONVERSION OF C$ TO #
 5 REM B: PLAYERS BET, CO: COLOR ODDS, M: PLAYER MONEY
 6 REM C1: ROULETTE WHEEL COLOR, C$: COLOR CHOSEN BY PLAYER
+7 REM RMAX: hold player max, MAX total maximum.
 10 M=1000:ODDS=36:WIN=0:MAX=1000:B=0:CO=1:RMAX=1000
 20 REM IFPEEK($D9)<>80 THEN SYS$FF5F: SET SCREEN TO 80 CHARACTERS
 30 poke 56320,0:poke56321,0:PRINT"{clear}":REM SET BKG BLUE, CLEAR SCREEN
-40 PRINT"{reverse on}{white}x16 roulette{reverse off}":FORI=1TO2:PRINTCHR$(13):NEXT
+40 PRINT"{reverse on}{white}c64 roulette{reverse off}":PRINTCHR$(13)
+50 N1=0:C1=0:C=0:C$="": rem clear out any values. 
 60 PRINT"{white}do you want to guess{return}{black}(n){white}umber or {black}(c){white}olor?{black}"
 70 GET A$:IFA$=""THEN70
 80 IFA$="n"THENGOSUB1000
@@ -26,7 +28,7 @@
 330 GOSUB 9000
 340 PRINT"{white}{down}why not press your luck? {black}{reverse on}y{reverse off}{white} or {black}{reverse on}n{reverse off}{white}?{black}"
 350 GETA$:IFA$="" THEN 350
-360 IF A$="y" THEN GOTO 60
+360 IF A$="y" THEN GOTO 50
 370 IF A$="n" THEN 7050
 380 GOTO 350
 1000 REM GUESS BY NUMBER
@@ -35,8 +37,8 @@
 1020 RETURN
 2000 PRINT"{white}what color: {red}{reverse on}(r)ed{reverse off}{white} or {black}{reverse on}(b)lack{reverse off}{white}?{black}"
 2010 GETC$:IFC$=""THEN2010
-2020 IFC$="b"THENC=2:REM BLACK CHOSEN
-2030 IFC$="r"THENC=1:REM RED CHOSEN
+2020 IFC$="b"THENC=2:PRINT"{down}{white}you chose {black}black{white}":REM BLACK CHOSEN
+2030 IFC$="r"THENC=1:PRINT"{down}{white}you chose {red}red{white}":REM RED CHOSEN
 2040 IFC$<>"b" AND C$<>"r"THEN2010
 2050 RETURN
 5000 REM COLLECT YOUR BET
